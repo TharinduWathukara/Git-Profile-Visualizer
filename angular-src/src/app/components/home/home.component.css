@@ -1,0 +1,83 @@
+/* jumbotron css of the home page */
+.jumbotron{
+    margin: 0%;
+    width: 100%;
+    border-radius: 0;
+    background: -webkit-linear-gradient(90deg, rgb(31, 25, 25) 10%, rgb(65, 65, 65) 90%); /* Chrome 10+, Saf5.1+ */
+    background:    -moz-linear-gradient(90deg, rgb(31, 25, 25) 10%, rgb(65, 65, 65) 90%); /* FF3.6+ */
+    background:     -ms-linear-gradient(90deg, rgb(31, 25, 25) 10%, rgb(65, 65, 65) 90%); /* IE10 */
+    background:      -o-linear-gradient(90deg, rgb(31, 25, 25) 10%, rgb(65, 65, 65) 90%); /* Opera 11.10+ */
+    background:         linear-gradient(90deg, rgb(31, 25, 25) 10%, rgb(65, 65, 65) 90%); /* W3C */
+}
+
+/* set each text center values font color to white */
+.text-center{
+    color: white;
+}
+
+/* set panel width and set it to center */
+.panel{
+    width: 80%;
+    margin: 0 auto;
+}
+
+strong{
+    color:rgb(0, 81, 128);
+}
+
+small{
+    color:rgb(104, 119, 117);
+    font-size:12px;
+}
+
+/* profile details css */
+.profile{
+  padding: 15px;
+  position: relative;
+  -moz-box-shadow: 1px 2px 4px rgba(108, 104, 104, 0.5);
+  -webkit-box-shadow: 1px 2px 4px rgba(108, 104, 104, 0.5);
+  box-shadow: 1px 2px 4px rgba(108, 104, 104, 0.5);
+  background: white;
+}
+
+.profile:hover{
+  position: relative;
+  -moz-box-shadow: 2px 4px 6px rgba(0, 0, 0,0.5);
+  -webkit-box-shadow: 2px 4px 6px rgba(0, 0, 0, .5);
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, .5);
+  padding: 10px;
+  background: white;
+}
+
+/* profile support details such as profile details */
+.profile-support-details{
+  position: relative;
+  -moz-box-shadow: 1px 2px 4px rgba(108, 104, 104, 0.5);
+  -webkit-box-shadow: 1px 2px 4px rgba(108, 104, 104, 0.5);
+  box-shadow: 1px 2px 4px rgba(108, 104, 104, 0.5);
+  background: white;
+}
+
+.profile-support-details:hover{
+  position: relative;
+  -moz-box-shadow: 2px 4px 6px rgba(0, 0, 0,0.5);
+  -webkit-box-shadow: 2px 4px 6px rgba(0, 0, 0, .5);
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, .5);
+  background: white;
+}
+
+.img-responsive{
+  width: 100%;
+}
+
+/* css to profile overview */
+.doughnutChartsContainer{
+  width:100%;
+  margin:0 auto;
+  
+  position: relative;
+  -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0,0.5);
+  -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  background: white;
+}

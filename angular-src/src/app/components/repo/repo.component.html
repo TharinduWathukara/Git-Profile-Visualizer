@@ -1,0 +1,443 @@
+<app-navbar></app-navbar>
+<br>
+
+<!-- all details related to repo details -->
+<div *ngIf="repo" class="row container" style="width: 100%; margin: 0 auto;">
+  <div class="col-md-4">
+    
+    <!-- repo name -->
+    <div class="profile container" style="width: 100%; margin-bottom: 20px;">
+        <p style="font-size: 35px; text-align: center; color:darkslategray;">{{ repo.name }}</p>
+        <a href="{{ repo.html_url }}" target="_blank">
+          <button type="button" style="border-radius: 0;" class="btn btn-success center-block btn-lg">Show Repository</button>
+        </a>
+    </div>
+    
+    <!-- other repository details -->
+    <div class="profile-support-details">
+      <p class="text-center" style="color:black; font-size: 25px;">Repository Details</p>
+      <hr>
+      <table>
+        <!-- full name or path -->
+        <tr>
+          <td style="width: 60; text-align: center;">
+            <img src="../../../assets/imgs/svg/approval.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Full name</p>
+            <p style="font-size: 12px;">{{ repo.full_name }}</p>
+          </td>
+        </tr>
+        <!-- description about repo -->
+        <tr *ngIf="repo.description">
+          <td style="width: 60px; text-align: center">
+            <img src="../../../assets/imgs/svg/info.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Description</p>
+            <p style="font-size: 12px;">{{ repo.description }}</p>
+          </td>
+        </tr>
+        <!-- main language of repository -->
+        <tr *ngIf="repo.language">
+          <td style="width: 60px; text-align: center">
+            <img src="../../../assets/imgs/svg/document.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Main Language</p>
+            <p style="font-size: 12x;">{{ repo.language }}</p>
+          </td>
+        </tr>
+        <!-- default branch -->
+        <tr *ngIf="repo.default_branch">
+          <td style="width: 60px; text-align: center">
+            <img src="../../../assets/imgs/svg/share.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Default Branch</p>
+            <p style="font-size: 12px;">{{ repo.default_branch }}</p>
+          </td>
+        </tr>
+        <!-- ceated at -->
+        <tr *ngIf="repo.created_at">
+          <td style="width: 60px; text-align: center">
+            <img src="../../../assets/imgs/svg/calendar.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Created at</p>
+            <p style="font-size: 12px;">{{ repo.created_at }}</p>
+          </td>
+        </tr>
+        <!-- updated at -->
+        <tr *ngIf="repo.updated_at">
+          <td style="width: 60px; text-align: center">
+            <img src="../../../assets/imgs/svg/news.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Last Updated at</p>
+            <p style="font-size: 12px;">{{ repo.updated_at }}</p>
+          </td>
+        </tr>
+        <!-- last pushed at -->
+        <tr *ngIf="repo.pushed_at">
+          <td style="width: 60px; text-align: center">
+            <img src="../../../assets/imgs/svg/planner.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Last Pushed at</p>
+            <p style="font-size: 12px;">{{ repo.pushed_at }}</p>
+          </td>
+        </tr>
+        <hr>
+        <!-- other languages, all the languages that used to program this repo -->
+        <tr *ngIf="languages">
+          <td style="width: 60px; text-align: center" valign="top">
+            <img src="../../../assets/imgs/svg/ratings.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Other Languages</p>
+            <div *ngFor="let language of languages" style="font-size: 12px;">
+              <p>{{ language }}</p>
+            </div>
+          </td>
+        </tr>
+        <hr>
+        <!-- all the contributors of this repo -->
+        <tr *ngIf="statistics.contributors">
+          <td style="width: 60px; text-align: center" valign="top">
+            <img src="../../../assets/imgs/svg/conference_call.svg" style="width:40px;" alt="Repositories">
+          </td>
+          <td>
+            <p style="font-size: 16px; font-weight: bold;">Contributors</p>
+            <div *ngFor="let contributor of statistics.contributors" style="font-size: 12px;">
+              <p>{{ contributor }}</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <br>
+    </div>
+  </div>
+  <div class="col-md-8">
+
+    <!-- right side up repo derails area -->
+    <div class="row continer doughnutChartsContainer" style="width: 100%">
+      <!-- size of repo -->
+      <div class="col-md-2">
+        <table>
+          <tr>
+            <td valign="top">
+              <img src="../../../assets/imgs/svg/database.svg" style="width:50px;" alt="Repositories">
+            </td>
+            <td style="padding-left: 10px;">
+              <p style="font-size: 15px; font-weight: bold;">Size(kB)</p>
+              <p>{{ repo.size }}</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- starts of repo -->
+      <div class="col-md-2">
+        <table>
+          <tr>
+            <td valign="top">
+              <img src="../../../assets/imgs/svg/rating.svg" style="width:50px;" alt="Repositories">
+            </td>
+            <td style="padding-left: 10px;">
+              <p style="font-size: 15px; font-weight: bold;">Stars</p>
+              <p *ngIf="repo.stargazers_count">{{ repo.stargazers_count }}</p>
+              <p *ngIf="!repo.stargazers_count">0</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- watchers count of repo -->
+      <div class="col-md-2">
+        <table>
+          <tr>
+            <td valign="top">
+              <img src="../../../assets/imgs/svg/conference_call.svg" style="width:50px;" alt="Repositories">
+            </td>
+            <td style="padding-left: 10px;">
+              <p style="font-size: 15px; font-weight: bold;">Watchers</p>
+              <p *ngIf="repo.watchers">{{ repo.watchers_count }}</p>
+              <p *ngIf="!repo.watchers_count">0</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- num of issues of repo -->
+      <div class="col-md-2">
+        <table>
+          <tr>
+            <td valign="top">
+              <img src="../../../assets/imgs/svg/answers.svg" style="width:50px;" alt="Repositories">
+            </td>
+            <td style="padding-left: 10px;">
+              <p style="font-size: 15px; font-weight: bold;">Issues</p>
+              <p *ngIf="repo.open_issues">{{ repo.open_issues }}</p>
+              <p *ngIf="!repo.open_issues">0</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- num of subscribers of repo -->
+      <div class="col-md-2">
+        <table>
+          <tr>
+            <td valign="top">
+              <img src="../../../assets/imgs/svg/voice_presentation.svg" style="width:50px;" alt="Repositories">
+            </td>
+            <td style="padding-left: 10px;">
+              <p style="font-size: 15px; font-weight: bold;">Subscribers</p>
+              <p *ngIf="repo.subscribers_count">{{ repo.subscribers_count }}</p>
+              <p *ngIf="!repo.subscribers_count">0</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- num of forks of repo -->
+      <div class="col-md-2">
+        <table>
+          <tr>
+            <td valign="top">
+              <img src="../../../assets/imgs/svg/bullish.svg" style="width:50px;" alt="Repositories">
+            </td>
+            <td style="padding-left: 10px;">
+              <p style="font-size: 15px; font-weight: bold;">Forks</p>
+              <p *ngIf="repo.forks_count">{{ repo.forks_count }}</p>
+              <p *ngIf="!repo.forks_count">0</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- charts area -->
+
+    <div *ngIf="statistics" class="container doughnutChartsContainer" style="width: 100%; margin-top: 15px;">
+      <!-- for statistics -->
+      <canvas id="canvas1" width="400px" height="150px"> </canvas>
+    </div>
+    <div *ngIf="statistics" class="container doughnutChartsContainer row" style="width: 100%; margin-top: 15px;">
+      <p class="text-center" style="color:black; font-size: 30px;">Contribution</p>
+
+      <div class="col-md-4 col-md-offset-1">
+        <br><br>
+        <!-- for contribution by statistics -->
+        <canvas id="canvas2" width="100px" height="100px"> </canvas>
+        <br><br>
+      </div>
+      <div class="col-md-4 col-md-offset-2">
+        <br><br>
+        <!-- for contribution by number of commits -->
+        <canvas id="canvas3" width="100px" height="100px"> </canvas>
+        <br><br>
+      </div>
+    </div>
+
+    <!-- button for analyze the code -->
+    <div class="container text-center" style="width: 100%; margin-top: 15px;">
+      <button type="button" class="btn btn-success btn-lg text-center" style="border-radius: 0;" (click)="getCodeQuality()">Analyze My Code</button>
+    </div>
+
+    <div *ngIf="codeQualityLoading" class="container text-center" style="width: 100%; margin-top: 20px;">
+      <img src="../../../assets/imgs/loading.gif" style="width: 100px;">
+      <p style="font-size: 15px;">Analyzing your Code... Please wait... </p>
+    </div>
+
+    <!-- this is for showing code analyzing results -->
+    <div *ngIf="codeQuality" class="container doughnutChartsContainer" style="width: 100%; margin-top: 15px;">
+      <p class="text-center" style="color:black; font-size: 30px;">Code Analyzing Results</p>
+      <div *ngIf="codeQualitySummary" class="container profile-support-details" style="width:96%; margin-bottom: 15px; border: 1px solid darkgray; background-color: lightgray;">
+        
+        <!-- SUMMARY of code quality results show in here -->
+        
+        <p class="text-center" style="font-size: 20px; margin-top: 20px;">Summary</p>
+        <hr>
+        <div class="row continer" style="width: 100%">
+          <!-- LOC lines of code -->
+          <div class="col-md-4">
+            <table>
+              <tr>
+                <td valign="top">
+                  <img src="../../../assets/imgs/svg/document.svg" style="width:50px;" alt="Repositories">
+                </td>
+                <td style="padding-left: 10px;">
+                  <p style="font-size: 15px; font-weight: bold;">Lines of Code</p>
+                  <p *ngIf="codeQualitySummary.total">Total : {{ codeQualitySummary.total }}</p>
+                  <p *ngIf="!codeQualitySummary.total">Total : 0</p>
+                  <p *ngIf="codeQualitySummary.source">Source : {{ codeQualitySummary.source }}</p>
+                  <p *ngIf="!codeQualitySummary.source">Source : 0</p>
+                  <p *ngIf="codeQualitySummary.empty">Empty : {{ codeQualitySummary.empty }}</p>
+                  <p *ngIf="!codeQualitySummary.empty">Empty : 0</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <!-- COMMENTS -->
+          <div class="col-md-4">
+            <table>
+              <tr>
+                <td valign="top">
+                  <img src="../../../assets/imgs/svg/comments.svg" style="width:50px;" alt="Repositories">
+                </td>
+                <td style="padding-left: 10px;">
+                  <p style="font-size: 15px; font-weight: bold;">Comments</p>
+                  <p *ngIf="codeQualitySummary.comment">Total : {{ codeQualitySummary.comment }}</p>
+                  <p *ngIf="!codeQualitySummary.comment">Total : 0</p>
+                  <p *ngIf="codeQualitySummary.single">Single line : {{ codeQualitySummary.single }}</p>
+                  <p *ngIf="!codeQualitySummary.single">Single line : 0</p>
+                  <p *ngIf="codeQualitySummary.block">Block : {{ codeQualitySummary.block }}</p>
+                  <p *ngIf="!codeQualitySummary.block">Block : 0</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <!-- TOTAL FILES and todos -->
+          <div class="col-md-4">
+            <table>
+              <tr>
+                <td valign="top">
+                  <img src="../../../assets/imgs/svg/conference_call.svg" style="width:50px;" alt="Repositories">
+                </td>
+                <td style="padding-left: 10px;">
+                  <p style="font-size: 15px; font-weight: bold;">Files and TODOs</p>
+                  <p>Total files scanned : {{ codeQuality.length }}</p>
+                  <p *ngIf="codeQualitySummary.todo">TODOs : {{ codeQualitySummary.todo }}</p>
+                  <p *ngIf="!codeQualitySummary.todo">TODOs : 0</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- more longer lines and file names -->
+        <div>
+          <table>
+            <tr>
+              <td valign="top">
+                <img src="../../../assets/imgs/svg/high_priority.svg" style="width:50px;" alt="Repositories">
+              </td>
+              <td style="padding-left: 10px;">
+                <p style="font-size: 15px; font-weight: bold;">Out of length lines</p>
+                <p *ngIf="codeQualitySummary.outLenghtLines">Total : {{ codeQualitySummary.outLenghtLines }}</p>
+                <p *ngIf="!codeQualitySummary.outLenghtLines">Total : 0</p>
+                <table *ngIf="codeQualitySummary.outLenghtFileNames">
+                  <tr>
+                    <td valign="top" style="width: 100px;"><p>File names :</p></td>
+                    <td><p>{{ codeQualitySummary.outLenghtFileNames }}</p></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <br>
+
+      <!-- search by filename -->
+      <div class="form-group" style="display:inline-block; margin-right:20px;">
+        <label>Search by File name :</label>
+        <input class="form-control" type="text" [(ngModel)]="file_name" placeholder="Search by file name" style="width:250px;" autofocus/>
+      </div>
+
+      <!-- loop for all files scanned -->
+      <div *ngFor="let file of codeQuality | search : file_name" class="container profile-support-details" style="width:96%; margin-bottom: 15px; border: 1px solid darkgray;">
+        <p class="text-center" style="font-size: 20px; margin-top: 20px;">{{ file.name }} 
+          <a href="{{ file.html_url }}" target="_blank"><span style="font-size: 15px;" *ngIf="file.path">({{ file.path }})</span></a>
+        </p>
+        <hr>
+        <div class="row continer" style="width: 100%">
+          <!-- LOC -->
+          <div class="col-md-4">
+            <table>
+              <tr>
+                <td valign="top">
+                  <img src="../../../assets/imgs/svg/document.svg" style="width:50px;" alt="Repositories">
+                </td>
+                <td style="padding-left: 10px;">
+                  <p style="font-size: 15px; font-weight: bold;">Lines of Code</p>
+                  <p *ngIf="file.total">Total : {{ file.total }}</p>
+                  <p *ngIf="!file.total">Total : 0</p>
+                  <p *ngIf="file.source">Source : {{ file.source }}</p>
+                  <p *ngIf="!file.source">Source : 0</p>
+                  <p *ngIf="file.empty">Empty : {{ file.empty }}</p>
+                  <p *ngIf="!file.empty">Empty : 0</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <!-- COMMENTS -->
+          <div class="col-md-4">
+            <table>
+              <tr>
+                <td valign="top">
+                  <img src="../../../assets/imgs/svg/comments.svg" style="width:50px;" alt="Repositories">
+                </td>
+                <td style="padding-left: 10px;">
+                  <p style="font-size: 15px; font-weight: bold;">Comments</p>
+                  <p *ngIf="file.comment">Total : {{ file.comment }}</p>
+                  <p *ngIf="!file.comment">Total : 0</p>
+                  <p *ngIf="file.single">Single line : {{ file.single }}</p>
+                  <p *ngIf="!file.single">Single line : 0</p>
+                  <p *ngIf="file.block">Block : {{ file.block }}</p>
+                  <p *ngIf="!file.block">Block : 0</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <!-- FILE SIZE and todos -->
+          <div class="col-md-4">
+            <table>
+              <tr>
+                <td valign="top">
+                  <img src="../../../assets/imgs/svg/conference_call.svg" style="width:50px;" alt="Repositories">
+                </td>
+                <td style="padding-left: 10px;">
+                  <p style="font-size: 15px; font-weight: bold;">Size and TODOs</p>
+                  <p *ngIf="file.size">Size : {{ file.size }}B</p>
+                  <p *ngIf="file.todo">TODOs : {{ file.todo }}</p>
+                  <p *ngIf="!file.todo">TODOs : 0</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- more longer lines and line numbers -->
+        <div>
+          <table>
+            <tr>
+              <td valign="top">
+                <img src="../../../assets/imgs/svg/high_priority.svg" style="width:50px;" alt="Repositories">
+              </td>
+              <td style="padding-left: 10px;">
+                <p style="font-size: 15px; font-weight: bold;">Out of length lines</p>
+                <p *ngIf="file.outLenghtLines">Total : {{ file.outLenghtLines }}</p>
+                <p *ngIf="!file.outLenghtLines">Total : 0</p>
+                <p *ngIf="file.outLenghtLineNumbers">Line numbers : {{ file.outLenghtLineNumbers }}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+<!-- footer -->
+<footer>
+  <div style="width:100%; color:white; background-color: rgb(36, 36, 36)">
+    <div class="row container">
+      <div class="col-md-1">
+        <img class="navbar-brand img-circle" style="height: 85px; padding-top: 30px;" src="../../../assets/imgs/gpalogo.png">
+      </div>
+      <div class="col-md-11">
+        <p style="padding-top: 20px; font-size: 30px;">GIT PROFILE VISUALIZER</p>
+        <p style="font-size: 16px;">The fastest and easiest way to analyze your GitHub Profiles</p>
+      </div>
+    </div>
+    <hr>
+    <p class=" text-center" style="padding-bottom: 15px; font-size: 10px">&copy; <span style="font-size: 13px">TK Pvt Ltd</span> Tharindu Wathukara</p>
+  </div>
+</footer>
