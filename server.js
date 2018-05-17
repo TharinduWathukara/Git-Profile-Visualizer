@@ -27,8 +27,8 @@ const mlaboptions = {
 
 mongoose.Promise=global.Promise;
 
-mongoose.connect(url,mlaboptions);
-// mongoose.connect('mongodb://127.0.0.1:27017/gpa');
+// mongoose.connect(url,mlaboptions);
+mongoose.connect('mongodb://127.0.0.1:27017/gpa');
 
 let db = mongoose.connection;
 db.on('connected',()=>{

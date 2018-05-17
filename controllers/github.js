@@ -32,7 +32,7 @@ githubFunctions = {
 
     //this function returns the details about all the repositories of a paticular user from {https://api.github.com/users/:username/repos}
     getUserRepos:(req,res)=>{
-        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
+        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?per_page=100&client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
         (err,body,response) => {
             if(err) console.log(err);
             else{
@@ -59,7 +59,7 @@ githubFunctions = {
 
     //this function analyze one's git profile and return popular repositories by watching, by stars and the size of the repos(KB)
     getReposDetails:(req,res)=>{
-        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
+        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?per_page=100&client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
         (err,body,response) => {
             if(err) console.log(err);
             else{
@@ -121,7 +121,7 @@ githubFunctions = {
 
     //this function returns git user's most widely used languages decending order.
     getPopularLanguages:(req,res)=>{
-        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
+        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?per_page=100&client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
         (err,body,response) => {
             if(err) console.log(err);
             else{
@@ -165,54 +165,110 @@ githubFunctions = {
 
     // this function returns the number of commits in a repo
     getRepoCommits:(req,res)=>{
-        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
+        request.get('https://api.github.com/users/' + req.params.username+ '/repos' + '?per_page=100&client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
         (err,body,response) => {
             if(err) console.log(err);
             else{
                 var repos = JSON.parse(body.body);
                 var data = {
+                    'count' : 0,
                     'repositories' : [],
                     'commits' : []
                 }
 
                 for (var i=0;i<repos.length;i++){
-                    this.data = numOfCommits(data,repos,i);
+                    data.repositories.push(repos[i].name);
+                    data.commits.push(0);
+                    data.count++;
+                    this.data = numOfCommits(data,repos,i,repos[i].name);
+
                 }
 
                 // get number of commits function
-                function numOfCommits(data,repos,i){
-                    request.get('https://api.github.com/repos/' + req.params.username+ '/' + repos[i].name + '/commits' + '?client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
+                function numOfCommits(data,repos,i,reponame){
+                    request.get('https://api.github.com/repos/' + req.params.username+ '/' + reponame + '/commits' + '?per_page=100&client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
                     (err,body,response) => {
                         if(err) console.log(err);
                         else{
                             var commit = JSON.parse(body.body);
+                            console.log(commit.length);
+                            var idx = data.repositories.indexOf(reponame);
+                            data.commits[idx] += commit.length;
 
-                            data.repositories.push(repos[i].name);
-                            data.commits.push(commit.length);
+                            if(commit.length == 100){
+                                getAllCommits(data,repos,i,commit[99].sha,reponame);
 
-                            if(i==repos.length-1){
-                                setTimeout(()=>{
-                                    var loop=15;
-                                    if(data.repositories.length<=loop){
-                                        loop=data.repositories.length
-                                    }
-                                    var newRepositories = [];
-                                    var newCommits = [];
-                                    for(var j=0;j<loop;j++){
-                                        var idx = data.commits.indexOf(Math.max.apply(null,data.commits));
-                                        newRepositories.push(data.repositories[idx]);
-                                        newCommits.push(data.commits[idx]);
-                                        data.commits[idx]=-1;
-                                    }
-
-                                    data.repositories = newRepositories;
-                                    data.commits = newCommits;
-
-                                    res.json(data);
-                                },500);
                             }else{
-                                return data;
+                                data.count--;
+                                if(data.count == 0){
+                                    setTimeout(()=>{
+                                        var loop=15;
+                                        if(data.repositories.length<=loop){
+                                            loop=data.repositories.length
+                                        }
+                                        var newRepositories = [];
+                                        var newCommits = [];
+                                        for(var j=0;j<loop;j++){
+                                            var idx = data.commits.indexOf(Math.max.apply(null,data.commits));
+                                            newRepositories.push(data.repositories[idx]);
+                                            newCommits.push(data.commits[idx]);
+                                            data.commits[idx]=-1;
+                                        }
+            
+                                        data.repositories = newRepositories;
+                                        data.commits = newCommits;
+            
+                                        res.json(data);
+                                    },10);
+                                }else{
+                                    return data;
+                                }
+
                             }
+                        }
+                    });
+                }
+
+                function getAllCommits(data,repos,i,sha,reponame){
+                    request.get('https://api.github.com/repos/' + req.params.username+ '/' + reponame + '/commits' + '?per_page=100&sha=' + sha + '&client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
+                    (err,body,response) => {
+                        if(err) console.log(err);
+                        else{
+                            var commit = JSON.parse(body.body);
+                            console.log(commit.length);
+                            var idx = data.repositories.indexOf(reponame);
+                            data.commits[idx] += commit.length;
+
+                            if(commit.length == 100){
+                                return getAllCommits(data,repos,i,commit[99].sha,reponame);
+
+                            }else{
+                                data.count--;
+                                if(data.count == 0){
+                                    setTimeout(()=>{
+                                        var loop=15;
+                                        if(data.repositories.length<=loop){
+                                            loop=data.repositories.length
+                                        }
+                                        var newRepositories = [];
+                                        var newCommits = [];
+                                        for(var j=0;j<loop;j++){
+                                            var idx = data.commits.indexOf(Math.max.apply(null,data.commits));
+                                            newRepositories.push(data.repositories[idx]);
+                                            newCommits.push(data.commits[idx]);
+                                            data.commits[idx]=-1;
+                                        }
+            
+                                        data.repositories = newRepositories;
+                                        data.commits = newCommits;
+            
+                                        res.json(data);
+                                    },10);
+                                }else{
+                                    return data;
+                                }
+                            }
+
                         }
                     });
                 }
@@ -267,7 +323,7 @@ githubFunctions = {
 
     //this function returns about the statiscs about a paticular repository such contribution by statistics, number of commits and repository statistics by month to month
     getRepoStats:(req,res)=>{
-        request.get('https://api.github.com/repos/'+req.body.username+'/' + req.body.name + '/commits' + '?client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
+        request.get('https://api.github.com/repos/'+req.body.username+'/' + req.body.name + '/commits' + '?per_page=100&client_id=' + githubConfig.client_id + '&client_secret=' + githubConfig.client_secret, {headers: {'User-Agent':'GIT Profile Visualizer'}},
         (err,body,response) => {
             if(err) console.log(err);
             else{
